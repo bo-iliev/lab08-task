@@ -17,18 +17,18 @@ resource "aws_launch_configuration" "lc" {
 
 resource "aws_autoscaling_group" "asg" {
   launch_configuration = aws_launch_configuration.lc.id
-  vpc_zone_identifier = var.subnet_ids
+  vpc_zone_identifier  = var.subnet_ids
   max_size             = var.asg_max_size
   min_size             = var.asg_min_size
   desired_capacity     = var.asg_desired_capacity
 
-  load_balancers    = [var.elb_name]  
+  load_balancers = [var.elb_name]
 
   tag {
     key                 = "Name"
     value               = var.instance_name
     propagate_at_launch = true
   }
-  depends_on = [ aws_key_pair.wp_ssh_key ]
+  depends_on = [aws_key_pair.wp_ssh_key]
 }
 

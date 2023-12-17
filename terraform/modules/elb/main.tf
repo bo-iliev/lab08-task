@@ -1,7 +1,7 @@
 resource "aws_elb" "web_elb" {
-  name               = "web-elb"
-  subnets            = [var.public_subnet_id]
-  security_groups    = [var.elb_security_group_id]
+  name            = "web-elb"
+  subnets         = [var.public_subnet_id]
+  security_groups = [var.elb_security_group_id]
 
   listener {
     instance_port     = 80
