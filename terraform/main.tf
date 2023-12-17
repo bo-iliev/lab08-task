@@ -46,13 +46,18 @@ module "rds" {
   db_engine_version          = "8.0.33"
   db_instance_class          = "db.t2.micro"
   db_name                    = "wordpressdb"
-  db_username                = "wpuser"
-  db_password                = "yourpassword"
+  db_username                = var.db_username
+  db_password                = var.db_password
   db_parameter_group_name    = "default.mysql8.0"
   db_subnet_ids              = module.vpc.private_subnet_ids
   rds_security_group_id      = module.vpc.rds_security_group_id
-  db_backup_retention_period = 7 # 
+  db_backup_retention_period = 7
   db_backup_window           = "03:00-04:00"
   db_maintenance_window      = "Sun:04:00-Sun:05:00"
 }
 
+module "s3_cloudfront" {
+  source = "./modules/s3"
+
+  bucket_name = var.bucket_name
+}
