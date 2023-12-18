@@ -1,13 +1,22 @@
 variable "ami_id" {
   description = "The AMI ID for the EC2 instance."
   type        = string
-  default     = "ami-06dd92ecc74fdfb36" # Replace with your desired AMI
 }
 
 variable "instance_type" {
   description = "The EC2 instance type."
   type        = string
   default     = "t2.micro"
+}
+
+variable "public_subnet_id" {
+  description = "The ID of the public subnet for the bastion host"
+  type        = string
+}
+
+variable "bastion_sg_id" {
+  description = "The ID of the bastion host security group"
+  type        = string
 }
 
 variable "subnet_ids" {
@@ -48,5 +57,25 @@ variable "asg_desired_capacity" {
 
 variable "elb_name" {
   description = "The name of the ELB"
+  type        = string
+}
+
+variable "db_name" {
+  description = "The name of the database"
+  type        = string
+}
+
+variable "db_user" {
+  description = "The username for the database"
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password for the database"
+  type        = string
+}
+
+variable "db_host" {
+  description = "The database host endpoint"
   type        = string
 }

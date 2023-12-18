@@ -18,9 +18,11 @@ module "vpc" {
 module "ec2" {
   source = "./modules/ec2"
 
-  ami_id               = "ami-06dd92ecc74fdfb36"
+  ami_id               = var.ami_id
   instance_type        = "t2.micro"
+  public_subnet_id = module.vpc.public_subnet_id
   subnet_ids           = module.vpc.private_subnet_ids
+  bastion_sg_id         = module.vpc.bastion_security_group_id
   security_group_id    = module.vpc.ec2_security_group_id
   instance_name        = "WordPressInstance"
   ssh_public_key       = var.ssh_public_key
@@ -28,6 +30,10 @@ module "ec2" {
   asg_min_size         = 1
   asg_desired_capacity = 2
   elb_name             = module.elb.elb_name
+  db_name = var.db_name
+  db_user = var.db_username
+  db_password = var.db_password
+  db_host              = module.rds.db_endpoint
 }
 
 module "elb" {
@@ -45,7 +51,7 @@ module "rds" {
   db_engine                  = "mysql"
   db_engine_version          = "8.0.33"
   db_instance_class          = "db.t2.micro"
-  db_name                    = "wordpressdb"
+  db_name                    =  var.db_name
   db_username                = var.db_username
   db_password                = var.db_password
   db_parameter_group_name    = "default.mysql8.0"
