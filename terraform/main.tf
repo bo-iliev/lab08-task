@@ -80,3 +80,13 @@ module "route53_elb_record" {
   elb_dns_name   = module.elb.elb_dns_name     
   elb_zone_id    = module.elb.elb_zone_id      
 }
+
+module "cloudwatch" {
+  source = "./modules/cloudwatch"
+
+  ec2_autoscaling_group_name  = module.ec2.autoscaling_group_name
+  elb_name                    = module.elb.elb_name
+  rds_instance_identifier     = module.rds.db_instance_id
+  elasticache_cluster_id      = module.elasticache.redis_cluster_id
+}
+
