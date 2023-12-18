@@ -17,3 +17,14 @@ variable "bucket_name" {
   type        = string
   description = "The name of the S3 bucket"
 }
+
+# TODO: Extend the Route53 to add domain.
+variable "hosted_zone_id" {
+  type        = string
+  description = "The Route53 Hosted Zone ID"
+}
+
+variable "record_name" {
+  type        = string
+  description = "The DNS record name"
+}

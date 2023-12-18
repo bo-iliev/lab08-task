@@ -18,7 +18,7 @@ resource "aws_db_instance" "wordpress_db" {
   skip_final_snapshot = true
 
   tags = {
-    Name = "wordpressdb"
+    Name = "wordpress-db"
   }
 }
 
@@ -27,6 +27,6 @@ resource "aws_db_subnet_group" "db_subnet_group" {
   subnet_ids = var.db_subnet_ids
 
   tags = {
-    Name = "MyDBSubnetGroup"
+    Name = "wordpress-db-subnet-group"
   }
 }

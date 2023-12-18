@@ -2,7 +2,7 @@ resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name = "MainVPC"
+    Name = "wordpress-vpc"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "PublicSubnet"
+    Name = "wp-public-subnet"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "PrivateSubnet-${each.key}"
+    Name = "wp-private-subnet-${each.key}"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "MainIGW"
+    Name = "wordpress-igw"
   }
 }
 
@@ -46,7 +46,7 @@ resource "aws_route_table" "public_route_table" {
   }
 
   tags = {
-    Name = "PublicRouteTable"
+    Name = "wp-public-route-table"
   }
 }
 

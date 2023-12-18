@@ -61,3 +61,22 @@ module "s3_cloudfront" {
 
   bucket_name = var.bucket_name
 }
+
+module "elasticache" {
+  source = "./modules/elasticache"
+
+  subnet_ids       = module.vpc.private_subnet_ids
+  cluster_id       = "wp-redis-cluster"
+  node_type        = "cache.t2.micro"
+  num_cache_nodes  = 1
+  security_group_id = module.vpc.elasticache_security_group_id
+}
+
+module "route53_elb_record" {
+  source = "./modules/route53"
+
+  hosted_zone_id = var.hosted_zone_id
+  record_name    = var.record_name
+  elb_dns_name   = module.elb.elb_dns_name     
+  elb_zone_id    = module.elb.elb_zone_id      
+}
