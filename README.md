@@ -86,6 +86,18 @@ After that the infrastructure should be ready to use:
 
 # ![image](https://github.com/bo-iliev/lab08-task/assets/71664336/1d4e02dc-d5cc-487f-a576-2dc23fb0e8ba)
 
+## 3. Recovery Procedures
+
+### 3.1 Backup Strategy
+
+**RDS Backups**:
+- **Automated Backups**: Your Terraform configuration sets the `backup_retention_period` for the RDS instance. This ensures automated daily backups of your WordPress database.
+- **Retention Period**: Backups are retained for a duration specified in `db_backup_retention_period`. It's crucial to set this period based on your recovery needs.
+- **Recovery Process**:
+  1. **Identify Recovery Point**: Choose the appropriate backup based on the time before the data issue occurred.
+  2. **Navigate to RDS Console**: Go to the Amazon RDS console and locate the `wordpress_db` instance.
+  3. **Restore Database**: Use the 'Restore to Point in Time' feature to recover your database to the desired state.
+  4. **Post-Restoration Steps**: After restoration, validate data integrity and update any necessary configurations.
 
 ## 3.2 Disaster Recovery
 
@@ -103,12 +115,6 @@ After that the infrastructure should be ready to use:
    - **Update AMIs**: If an instance failure is due to outdated AMIs, update them with the latest configurations and patches.
    - **Adjust Scaling Policies**: In case of traffic spikes or changes in load patterns, modify the scaling policies to ensure optimal performance.
    - **Manual Replacement**: In rare cases, manually terminate and replace instances if Auto Scaling doesn't respond as expected.
-
-**S3 Recovery**:
-1. **Versioning Enabled Buckets**: For S3 buckets with versioning enabled, navigate to the bucket and locate the file needing recovery.
-2. **Restore Previous Versions**: Select the desired version of the file from the list of versions and download or restore it.
-3. **Recover Deleted Files**: If a file was deleted, it can still be recovered if versioning is enabled. Find the delete marker of the file and delete it to restore the file.
-4. **Non-Versioned Buckets**: For buckets without versioning, recovery relies on S3 backup mechanisms like cross-region replication or manual backups.
 
 ## 3.3 Monitoring and Alerts
 
