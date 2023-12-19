@@ -2,7 +2,8 @@
 
 ## 1. Architecture Overview
 
-![Architecture Overview](https://github.com/bo-iliev/lab08-task/assets/71664336/8855ba1f-9d62-4dad-8803-58ba18ed79fc)
+![Architecture Overview](https://github.com/bo-iliev/lab08-task/assets/71664336/f4ff509c-5142-451e-8615-7aca47a52d04)
+
 
 
 ### 1.1 System Components
@@ -86,32 +87,62 @@ After that the infrastructure should be ready to use:
 # ![image](https://github.com/bo-iliev/lab08-task/assets/71664336/1d4e02dc-d5cc-487f-a576-2dc23fb0e8ba)
 
 
-## 3. Recovery Procedures
+## 3.2 Disaster Recovery
 
-### 3.1 Backup Strategy
+**RDS Recovery**:
+1. **Identify the Issue**: Determine the nature and extent of the data corruption or loss.
+2. **Access RDS Console**: Go to the Amazon RDS console and navigate to the 'Snapshots' section.
+3. **Choose a Backup**: Select an appropriate automated backup or manual snapshot based on the time before corruption or loss occurred.
+4. **Restore the Database**: Click on the 'Restore' button for the chosen backup. Configure the DB instance settings as required.
+5. **Validate Data**: Once the restoration process is complete, validate the integrity and completeness of the data.
+6. **Update DNS or Connection Strings**: If the restored DB instance has a new endpoint, update the DNS records or connection strings in your application.
 
-- **RDS Backups**: Utilize RDS's automated backup feature. Ensure backups are taken daily and retained for a specified duration. Document how to perform a point-in-time recovery using these backups.
+**EC2 Recovery**:
+1. **Monitoring Health**: Auto Scaling monitors the health of EC2 instances and automatically replaces instances marked as unhealthy.
+2. **Manual Interventions**:
+   - **Update AMIs**: If an instance failure is due to outdated AMIs, update them with the latest configurations and patches.
+   - **Adjust Scaling Policies**: In case of traffic spikes or changes in load patterns, modify the scaling policies to ensure optimal performance.
+   - **Manual Replacement**: In rare cases, manually terminate and replace instances if Auto Scaling doesn't respond as expected.
 
-- **S3 Data Preservation**: Implement versioning and lifecycle policies on the S3 bucket to ensure data durability and recoverability.
+**S3 Recovery**:
+1. **Versioning Enabled Buckets**: For S3 buckets with versioning enabled, navigate to the bucket and locate the file needing recovery.
+2. **Restore Previous Versions**: Select the desired version of the file from the list of versions and download or restore it.
+3. **Recover Deleted Files**: If a file was deleted, it can still be recovered if versioning is enabled. Find the delete marker of the file and delete it to restore the file.
+4. **Non-Versioned Buckets**: For buckets without versioning, recovery relies on S3 backup mechanisms like cross-region replication or manual backups.
 
-### 3.2 Disaster Recovery
+## 3.3 Monitoring and Alerts
 
-- **RDS Recovery**: Provide detailed steps on restoring the RDS instance from automated backups or snapshots in case of data corruption or loss.
+### CloudWatch Alarms Setup and Configuration
 
-- **EC2 Recovery**: Auto Scaling automatically replaces unhealthy instances. Detail any manual intervention steps if required, such as updating AMIs or scaling policies.
+This Terraform setup configures CloudWatch alarms to monitor key metrics across the infrastructure, ensuring timely alerts and proactive management.
 
-- **S3 Recovery**: Outline the process for recovering data from S3 backups, including how to restore previous versions of files or recover deleted files.
+1. **AWS SNS Topic for Alarms**: A dedicated SNS topic, `cloudwatch-alarms-topic`, is created to aggregate alarm notifications.
+   
+2. **EC2 CPU Utilization Alarm**:
+   - **Alarm Name**: `ec2-cpu-utilization`
+   - **Metric**: Monitors CPU utilization of EC2 instances within the specified Auto Scaling group.
+   - **Threshold**: Set to trigger at or above 75% CPU utilization, averaged over two consecutive periods of 60 seconds.
 
-### 3.3 Monitoring and Alerts
+3. **ELB Unhealthy Hosts Alarm**:
+   - **Alarm Name**: `elb-unhealthy-hosts`
+   - **Metric**: Tracks the count of unhealthy hosts in the specified ELB.
+   - **Threshold**: Triggers if there is at least one unhealthy host, averaged over two consecutive periods of 300 seconds.
 
-- **CloudWatch Alarms**: Detail the process of responding to CloudWatch alarms, including common issues and troubleshooting steps for EC2, RDS and ELB.
+4. **RDS CPU Utilization Alarm**:
+   - **Alarm Name**: `rds-cpu-utilization`
+   - **Metric**: Monitors the CPU utilization of the specified RDS instance.
+   - **Threshold**: Set to activate at or above 85% CPU utilization, averaged over two periods of 60 seconds.
 
-- **Performance Metrics**: List key performance metrics that should be monitored for each AWS component to ensure optimal operation.
+5. **ElastiCache Redis CPU Utilization Alarm**:
+   - **Alarm Name**: `elasticache-redis-cpu-utilization`
+   - **Metric**: Observes CPU utilization of the ElastiCache Redis cluster.
+   - **Threshold**: Set to alarm at or above 85% CPU utilization, averaged across two periods of 60 seconds.
+
 
 ## 4. Further Improvements and Discussion Points
 
-- **CI/CD Pipeline**: Implement a CI/CD pipeline to automate the deployment of infrastructure changes.
-- **CI/CD Pipeline**: Implement a CI/CD pipeline to automate the deployment of WordPress changes. This would depend on the way the WordPress site is managed. For example, if it's managed via Git, you could use a CI/CD tool like Jenkins to automatically deploy changes to the site.
+- **CI/CD Pipeline for Infra**: Implement a CI/CD pipeline to automate the deployment of infrastructure changes.
+- **CI/CD Pipeline for WP**: Implement a CI/CD pipeline to automate the deployment of WordPress changes. This would depend on the way the WordPress site is managed. For example, if it's managed via Git, you could use a CI/CD tool like Jenkins to automatically deploy changes to the site.
 - **Install S3 Plugin**: Install the S3 and CloudFront plugin to automatically upload static files to S3.
 - **Shared Storage for wp-content?**: Consider using a shared storage solution like Amazon EFS for wp-content to ensure that all EC2 instances have access to the same files like plugins and themes.
 - **Add more config options**: Add more configuration options to the Terraform modules, such as the ability to specify the number of EC2 instances, the instance type, the RDS instance type, etc.
