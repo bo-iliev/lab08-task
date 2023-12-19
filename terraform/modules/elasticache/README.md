@@ -34,3 +34,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_elasticache_redis_endpoint"></a> [elasticache\_redis\_endpoint](#output\_elasticache\_redis\_endpoint) | The endpoint of the Redis ElastiCache cluster |
+| <a name="output_redis_cluster_id"></a> [redis\_cluster\_id](#output\_redis\_cluster\_id) | The ID of the Redis cluster |

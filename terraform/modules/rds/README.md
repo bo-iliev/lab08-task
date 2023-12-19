@@ -42,5 +42,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_db_endpoint"></a> [db\_endpoint](#output\_db\_endpoint) | The connection endpoint for the RDS instance |
 | <a name="output_db_instance_endpoint"></a> [db\_instance\_endpoint](#output\_db\_instance\_endpoint) | The connection endpoint for the RDS instance |
 | <a name="output_db_instance_id"></a> [db\_instance\_id](#output\_db\_instance\_id) | The ID of the RDS instance |

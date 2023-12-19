@@ -48,7 +48,7 @@ build {
     "sudo apt-get upgrade -y",
     "sudo apt-get install -y nginx",
     "sudo apt-get update -y",
-    "sudo apt-get install -y nginx php7.4-fpm php-mysql php-opcache php-gd php-xml php-mbstring",
+    "sudo apt-get install -y nginx php7.4-fpm php-mysql php-redis php-opcache php-gd php-xml php-mbstring",
     "sudo systemctl start php7.4-fpm",
     "sudo systemctl enable php7.4-fpm",
     "sudo systemctl start nginx",

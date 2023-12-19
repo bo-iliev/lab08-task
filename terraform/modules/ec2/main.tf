@@ -11,6 +11,7 @@ data "template_file" "init" {
     db_user     = var.db_user
     db_password = var.db_password
     db_host     = var.db_host
+    redis_host  = var.redis_host
   }
 }
 
@@ -51,6 +52,10 @@ resource "aws_instance" "bastion_host" {
   key_name      = aws_key_pair.wp_ssh_key.key_name
   subnet_id = var.public_subnet_id
   security_groups = [var.bastion_sg_id]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = {
     Name = "BastionHost"

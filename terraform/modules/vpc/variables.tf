@@ -3,9 +3,13 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "public_subnet_cidr" {
-  description = "CIDR block for the public subnet"
-  type        = string
+
+variable "public_subnets" {
+  description = "A map of public subnets"
+  type = map(object({
+    cidr_block = string
+    az         = string
+  }))
 }
 
 variable "private_subnets" {

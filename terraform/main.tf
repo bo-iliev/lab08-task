@@ -2,7 +2,16 @@ module "vpc" {
   source = "./modules/vpc"
 
   vpc_cidr           = "10.0.0.0/16"
-  public_subnet_cidr = "10.0.3.0/24"
+  public_subnets = {
+    "subnet1" = {
+      cidr_block = "10.0.3.0/24"
+      az         = "eu-central-1a"
+    },
+    "subnet2" = {
+      cidr_block = "10.0.4.0/24"
+      az         = "eu-central-1b"
+    }
+  }
   private_subnets = {
     "subnet1" = {
       cidr_block = "10.0.1.0/24"
@@ -20,7 +29,7 @@ module "ec2" {
 
   ami_id               = var.ami_id
   instance_type        = "t2.micro"
-  public_subnet_id = module.vpc.public_subnet_id
+  public_subnet_id = module.vpc.public_subnet_ids[0]
   subnet_ids           = module.vpc.private_subnet_ids
   bastion_sg_id         = module.vpc.bastion_security_group_id
   security_group_id    = module.vpc.ec2_security_group_id
@@ -34,12 +43,13 @@ module "ec2" {
   db_user = var.db_username
   db_password = var.db_password
   db_host              = module.rds.db_endpoint
+  redis_host           = module.elasticache.elasticache_redis_endpoint
 }
 
 module "elb" {
   source = "./modules/elb"
 
-  public_subnet_id      = module.vpc.public_subnet_id
+  public_subnet_ids     = module.vpc.public_subnet_ids
   elb_security_group_id = module.vpc.elb_security_group_id
 }
 

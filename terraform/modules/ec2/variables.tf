@@ -79,3 +79,8 @@ variable "db_host" {
   description = "The database host endpoint"
   type        = string
 }
+
+variable "redis_host" {
+  description = "The Redis host endpoint"
+  type        = string
+}

@@ -3,9 +3,9 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
-output "public_subnet_id" {
-  description = "The ID of the public subnet"
-  value       = aws_subnet.public.id
+output "public_subnet_ids" {
+  description = "The IDs of the public subnets"
+  value       = [for subnet in aws_subnet.public : subnet.id]
 }
 
 output "private_subnet_ids" {
@@ -33,3 +33,9 @@ output "elasticache_security_group_id" {
   description = "The ID of the security group for Elasticache"
   value       = aws_security_group.elasticache_sg.id
 }
+
+output "bastion_security_group_id" {
+  description = "The ID of the security group for Elasticache"
+  value       = aws_security_group.bastion_sg.id
+}
+

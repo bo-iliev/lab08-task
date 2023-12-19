@@ -1,6 +1,6 @@
 resource "aws_elb" "web_elb" {
   name            = "web-elb"
-  subnets         = [var.public_subnet_id]
+  subnets         = var.public_subnet_ids
   security_groups = [var.elb_security_group_id]
 
   listener {
@@ -14,7 +14,7 @@ resource "aws_elb" "web_elb" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 3
-    target              = "HTTP:80/"
+    target              = "TCP:80"
     interval            = 30
   }
 
